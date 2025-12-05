@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  自动加载更多、解锁搜索结果、隐藏全局加载遮罩，并在右下角显示小加载指示
 // @match        https://mods.paradoxplaza.com/games/*
 // @match        *://mods.paradoxinteractive.com/*
@@ -31,7 +31,6 @@
         if (!el) return false;
         return String(el.className).includes('Loader-styles__active');
     }
-
     /******************************************************************
      * 功能一：LOAD MORE 按钮出现在视口上方任意位置到视口下方阈值内时自动点击
      * - 上方：无限上方都算（按钮一旦出现过并在视口上方，也会继续触发）
@@ -41,6 +40,8 @@
     if (ENABLE_AUTO_LOAD_MORE) {
         if (location.host === 'mods.paradoxplaza.com' &&
             location.pathname.startsWith('/games/')) {
+
+            let autoLoadTimerStarted = false;
 
             function getLoadMoreButton() {
                 const buttons = document.querySelectorAll('button');
@@ -77,7 +78,6 @@
             function checkAndAutoLoad() {
                 // 如果全局 Loader 正在转，就直接退出，不要继续自动加载
                 if (isGlobalLoaderActive()) {
-                    // console.log('Global loader active, skip auto load');
                     return;
                 }
 
@@ -89,10 +89,23 @@
                 }
             }
 
-            window.addEventListener('scroll', checkAndAutoLoad);
-            window.addEventListener('load', checkAndAutoLoad);
+            function startAutoLoadTimerOnce() {
+                if (autoLoadTimerStarted) return;
+                autoLoadTimerStarted = true;
+                // 轮询一次，解决“没滚动就不触发”的边界情况
+                setInterval(checkAndAutoLoad, 500);
+            }
 
-            console.log('Paradox Mods Auto Load More (top∞ ~ bottom threshold) enabled.');
+            // 滚动时检查
+            window.addEventListener('scroll', checkAndAutoLoad);
+
+            // 初次加载也检查一次，并启动轮询
+            window.addEventListener('load', () => {
+                checkAndAutoLoad();
+                startAutoLoadTimerOnce();
+            });
+
+            console.log('Paradox Mods Auto Load More (top∞ ~ bottom threshold, with polling) enabled.');
         }
     }
 
