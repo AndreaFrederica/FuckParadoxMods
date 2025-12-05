@@ -7,7 +7,7 @@
 
 A browser userscript that modernizes the Paradox Mods website experience.
 
-**Current Version:** 1.1
+**Current Version:** 1.2
 
 ## 📝 About
 
