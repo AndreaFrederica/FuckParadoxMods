@@ -1,0 +1,2 @@
+# FuckParadoxMods
+让你的ParadoxMods网页版正常一点
