@@ -71,7 +71,7 @@ After installation, the script runs automatically when you visit the Paradox Mod
 
 ### Feature Configuration
 
-If you need to customize feature toggles, edit the script file and find the following configuration options at the beginning:
+If you need to customize feature toggles, edit the script file and find the following configuration options at the beginning (comments shown here are translated for clarity):
 
 ```javascript
 const ENABLE_AUTO_LOAD_MORE = true;              // Auto load more

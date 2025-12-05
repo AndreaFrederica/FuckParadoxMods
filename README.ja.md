@@ -71,7 +71,7 @@ Paradox Modsは、Paradox Interactiveのゲーム（Hearts of Iron IV、Europa U
 
 ### 機能設定
 
-機能トグルをカスタマイズする必要がある場合は、スクリプトファイルを編集し、冒頭の次の設定オプションを見つけてください：
+機能トグルをカスタマイズする必要がある場合は、スクリプトファイルを編集し、冒頭の次の設定オプションを見つけてください（コメントは分かりやすくするために翻訳されています）：
 
 ```javascript
 const ENABLE_AUTO_LOAD_MORE = true;              // 自動ロード
