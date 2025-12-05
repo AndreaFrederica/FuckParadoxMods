@@ -1,5 +1,5 @@
 <!-- Language Switcher -->
-**言語:** [English](README.md) | [日本語](README.ja.md)
+**言語:** [English](README.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md)
 
 ---
 
