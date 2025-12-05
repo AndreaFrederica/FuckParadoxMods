@@ -1,102 +1,107 @@
-# FuckParadoxMods
+<!-- Language Switcher -->
+**Languages:** [English](README.md) | [日本語](README.ja.md)
 
-让 Paradox Mods 网页版像一个正常的现代网页
+---
 
-**当前版本：1.1**
+# Paradox Mods Helper
 
-## 📝 简介
+A browser userscript that modernizes the Paradox Mods website experience.
 
-这是一个油猴（Tampermonkey）用户脚本，旨在改善 Paradox Mods 官方网站的用户体验，让它表现得更像一个现代化的网页应用。
+**Current Version:** 1.1
 
-Paradox Mods 是 Paradox Interactive 旗下游戏（如《钢铁雄心4》、《欧陆风云4》、《群星》等）的官方模组平台。虽然功能齐全，但其网页版的用户体验有待改进。本脚本通过一系列优化，让浏览和使用 Paradox Mods 网站更加流畅和舒适。
+## 📝 About
 
-**脚本名称：** Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
+This is a Tampermonkey userscript designed to improve the user experience of the official Paradox Mods website, making it behave more like a modern web application.
 
-## ✨ 功能特性
+Paradox Mods is the official mod platform for Paradox Interactive games (such as Hearts of Iron IV, Europa Universalis IV, Stellaris, and more). While fully functional, its web interface has room for improvement. This script enhances the browsing experience through various optimizations.
 
-- 🔄 **自动加载更多**：当 "LOAD MORE" 按钮接近视口时自动点击，无需手动点击即可连续浏览模组列表
-- 🔓 **解锁搜索结果**：移除搜索时的遮罩层，让搜索结果立即可见可交互，无需等待加载完成
-- 🎭 **隐藏加载遮罩**：隐藏全局加载遮罩层，避免频繁的全屏遮挡，提供更流畅的浏览体验
-- 🔄 **迷你加载指示器**：在右下角显示一个小型加载提示，既能了解加载状态又不影响页面使用
-- ⚙️ **功能开关**：支持通过修改脚本开关单独启用/禁用各项功能
+**Script Name:** Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
 
-## 📦 安装方法
+## ✨ Features
 
-### 前置要求
+- 🔄 **Auto Load More**: Automatically clicks the "LOAD MORE" button when it approaches the viewport, enabling continuous browsing without manual clicks
+- 🔓 **Unlock Search Results**: Removes the overlay during searches, making search results immediately visible and interactive without waiting for loading to complete
+- 🎭 **Hide Loading Overlay**: Hides the global loading overlay to prevent frequent full-screen blocking, providing a smoother browsing experience
+- 🔄 **Mini Loading Indicator**: Displays a small loading indicator in the bottom-right corner, keeping you informed of loading status without interfering with page usage
+- ⚙️ **Feature Toggles**: Supports individual enable/disable switches for each feature by modifying the script
 
-首先，你需要在浏览器中安装一个用户脚本管理器：
+## 📦 Installation
 
-- **Chrome/Edge/Brave**：[Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
-- **Firefox**：[Tampermonkey](https://addons.mozilla.org/firefox/addon/tampermonkey/) 或 [Greasemonkey](https://addons.mozilla.org/firefox/addon/greasemonkey/)
-- **Safari**：[Tampermonkey](https://apps.apple.com/app/tampermonkey/id1482490089)
-- **Opera**：[Tampermonkey](https://addons.opera.com/extensions/details/tampermonkey-beta/)
+### Prerequisites
 
-### 安装脚本
+First, install a userscript manager in your browser:
 
-#### 方法一：直接安装（推荐）
+- **Chrome/Edge/Brave**: [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)
+- **Firefox**: [Tampermonkey](https://addons.mozilla.org/firefox/addon/tampermonkey/) or [Greasemonkey](https://addons.mozilla.org/firefox/addon/greasemonkey/)
+- **Safari**: [Tampermonkey](https://apps.apple.com/app/tampermonkey/id1482490089)
+- **Opera**: [Tampermonkey](https://addons.opera.com/extensions/details/tampermonkey-beta/)
 
-点击下面的链接，Tampermonkey 会自动识别并提示安装：
+### Installing the Script
 
-**[点击安装脚本](https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.user.js)**
+#### Method 1: Direct Installation (Recommended)
 
-#### 方法二：手动安装
+Click the link below, and Tampermonkey will automatically recognize and prompt you to install:
 
-1. 下载或复制 [script.js](https://github.com/AndreaFrederica/FuckParadoxMods/blob/main/script.user.js) 文件内容
-2. 在 Tampermonkey 管理面板中选择"添加新脚本"
-3. 粘贴脚本内容并保存
+**[Click to Install Script](https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.user.js)**
 
-安装完成后，访问 [Paradox Mods](https://mods.paradoxplaza.com/) 即可自动生效。
+#### Method 2: Manual Installation
 
-> 💡 **自动更新**：如果使用方法一安装，Tampermonkey 会自动检测并更新脚本到最新版本
+1. Download or copy the contents of [script.user.js](https://github.com/AndreaFrederica/FuckParadoxMods/blob/main/script.user.js)
+2. In the Tampermonkey management panel, select "Add new script"
+3. Paste the script content and save
 
-## 🎮 支持的游戏
+After installation, visit [Paradox Mods](https://mods.paradoxplaza.com/) and the script will activate automatically.
 
-本脚本适用于所有使用 Paradox Mods 平台的游戏，包括但不限于：
+> 💡 **Auto-updates**: If you use Method 1 for installation, Tampermonkey will automatically detect and update the script to the latest version
 
-- Hearts of Iron IV (钢铁雄心4)
-- Europa Universalis IV (欧陆风云4)
-- Crusader Kings III (十字军之王3)
-- Stellaris (群星)
-- Cities: Skylines (城市：天际线)
-- Victoria 3 (维多利亚3)
+## 🎮 Supported Games
 
-## 🔧 使用说明
+This script works with all games using the Paradox Mods platform, including but not limited to:
 
-安装完成后，脚本会在你访问 Paradox Mods 网站时自动运行，无需任何额外配置。
+- Hearts of Iron IV
+- Europa Universalis IV
+- Crusader Kings III
+- Stellaris
+- Cities: Skylines
+- Victoria 3
 
-### 功能配置
+## 🔧 Usage
 
-如果需要自定义功能开关，可以编辑脚本文件，在开头找到以下配置项：
+After installation, the script runs automatically when you visit the Paradox Mods website. No additional configuration is needed.
+
+### Feature Configuration
+
+If you need to customize feature toggles, edit the script file and find the following configuration options at the beginning:
 
 ```javascript
-const ENABLE_AUTO_LOAD_MORE = true;              // 自动加载更多
-const ENABLE_STRIP_IS_SEARCHING = true;          // 解锁搜索结果
-const ENABLE_CSS_UNLOCK_AND_HIDE_LOADER = true;  // 隐藏遮罩 + 迷你指示器
+const ENABLE_AUTO_LOAD_MORE = true;              // Auto load more
+const ENABLE_STRIP_IS_SEARCHING = true;          // Unlock search results
+const ENABLE_CSS_UNLOCK_AND_HIDE_LOADER = true;  // Hide overlay + mini indicator
 ```
 
-将对应的 `true` 改为 `false` 即可关闭该功能。
+Change the corresponding `true` to `false` to disable a feature.
 
-### 适用页面
+### Applicable Pages
 
-- **自动加载更多**：`https://mods.paradoxplaza.com/games/*`（游戏模组列表页）
-- **搜索优化和加载优化**：所有 Paradox Mods 相关域名
+- **Auto Load More**: `https://mods.paradoxplaza.com/games/*` (game mod list pages)
+- **Search and Loading Optimizations**: All Paradox Mods domains
   - `mods.paradoxplaza.com`
   - `mods.paradoxinteractive.com`
 
-## 🤝 贡献
+## 🤝 Contributing
 
-欢迎提交 Issue 和 Pull Request 来帮助改进这个项目！
+Issues and Pull Requests are welcome to help improve this project!
 
-## 📄 许可证
+## 📄 License
 
-本项目采用 [Mozilla Public License 2.0](LICENSE) 许可证。
+This project is licensed under the [Mozilla Public License 2.0](LICENSE).
 
-## ⚠️ 免责声明
+## ⚠️ Disclaimer
 
-本脚本仅用于改善用户体验，不涉及任何破解、作弊或其他违规行为。使用本脚本即表示你同意自行承担使用风险。
+This script is solely for improving user experience and does not involve any cracking, cheating, or other violations. By using this script, you agree to assume all risks at your own discretion.
 
-## 🔗 相关链接
+## 🔗 Related Links
 
-- [Paradox Mods 官网](https://mods.paradoxplaza.com/)
-- [Paradox Interactive 官网](https://www.paradoxinteractive.com/)
-- [Tampermonkey 官网](https://www.tampermonkey.net/)
+- [Paradox Mods Official Site](https://mods.paradoxplaza.com/)
+- [Paradox Interactive Official Site](https://www.paradoxinteractive.com/)
+- [Tampermonkey Official Site](https://www.tampermonkey.net/)
