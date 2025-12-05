@@ -37,11 +37,11 @@ Paradox Mods 是 Paradox Interactive 旗下游戏（如《钢铁雄心4》、《
 
 点击下面的链接，Tampermonkey 会自动识别并提示安装：
 
-**[点击安装脚本](https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.js)**
+**[点击安装脚本](https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.user.js)**
 
 #### 方法二：手动安装
 
-1. 下载或复制 [script.js](https://github.com/AndreaFrederica/FuckParadoxMods/blob/main/script.js) 文件内容
+1. 下载或复制 [script.js](https://github.com/AndreaFrederica/FuckParadoxMods/blob/main/script.user.js) 文件内容
 2. 在 Tampermonkey 管理面板中选择"添加新脚本"
 3. 粘贴脚本内容并保存
 
