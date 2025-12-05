@@ -17,7 +17,7 @@
      * 功能开关：改成 false 可以单独关闭某个功能（默认全开）
      ******************************************************************/
     const ENABLE_AUTO_LOAD_MORE = true;
-    const ENABLE_STRIP_IS_SEARCHING = false;
+    const ENABLE_STRIP_IS_SEARCHING = true;
     const ENABLE_CSS_UNLOCK_AND_HIDE_LOADER = true; // 同时控制右下角 mini spinner
 
     /******************************************************************
