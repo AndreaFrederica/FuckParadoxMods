@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  自动加载更多、解锁搜索结果、隐藏全局加载遮罩，并在右下角显示小加载指示
 // @match        https://mods.paradoxplaza.com/games/*
 // @match        *://mods.paradoxinteractive.com/*
@@ -17,15 +17,27 @@
      * 功能开关：改成 false 可以单独关闭某个功能（默认全开）
      ******************************************************************/
     const ENABLE_AUTO_LOAD_MORE = true;
-    const ENABLE_STRIP_IS_SEARCHING = true;
+    const ENABLE_STRIP_IS_SEARCHING = false;
     const ENABLE_CSS_UNLOCK_AND_HIDE_LOADER = true; // 同时控制右下角 mini spinner
 
     /******************************************************************
- * 功能一：LOAD MORE 按钮出现在视口上方任意位置到视口下方阈值内时自动点击
- * - 上方：无限上方都算（按钮一旦出现过并在视口上方，也会继续触发）
- * - 下方：只在视口下方 offsetBottom (默认 400px) 内触发
- * 作用范围：mods.paradoxplaza.com/games/*
- ******************************************************************/
+     * 通用：检测全局 Loader 是否处于 active 状态
+     * 供：功能一（自动加载）和功能三（mini spinner）共用
+     ******************************************************************/
+    function isGlobalLoaderActive() {
+        const el = document.querySelector(
+            '[class*="Loader-styles__loader"][class*="Loader-styles__global"]'
+        );
+        if (!el) return false;
+        return String(el.className).includes('Loader-styles__active');
+    }
+
+    /******************************************************************
+     * 功能一：LOAD MORE 按钮出现在视口上方任意位置到视口下方阈值内时自动点击
+     * - 上方：无限上方都算（按钮一旦出现过并在视口上方，也会继续触发）
+     * - 下方：只在视口下方 offsetBottom 内触发
+     * 作用范围：mods.paradoxplaza.com/games/*
+     ******************************************************************/
     if (ENABLE_AUTO_LOAD_MORE) {
         if (location.host === 'mods.paradoxplaza.com' &&
             location.pathname.startsWith('/games/')) {
@@ -66,6 +78,12 @@
             }
 
             function checkAndAutoLoad() {
+                // 🔴 如果全局 Loader 正在转，就直接退出，不要继续自动加载
+                if (isGlobalLoaderActive()) {
+                    // console.log('Global loader active, skip auto load');
+                    return;
+                }
+
                 const btn = getLoadMoreButton();
                 if (!btn) return;
 
@@ -214,17 +232,7 @@
             box.appendChild(spinner);
             box.appendChild(text);
 
-            // body 可能还没准备好，优先挂 body，没有就挂 html
             (document.body || document.documentElement).appendChild(box);
-        }
-
-        // 检查站点原生全局 loader 是否处于 active 状态
-        function isGlobalLoaderActive() {
-            const el = document.querySelector(
-                '[class*="Loader-styles__loader"][class*="Loader-styles__global"]'
-            );
-            if (!el) return false;
-            return String(el.className).includes('Loader-styles__active');
         }
 
         // 根据 loader 状态更新 spinner 的显隐
