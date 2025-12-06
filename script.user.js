@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
 // @namespace    http://tampermonkey.net/
-// @version      1.8
+// @version      1.9
 // @description  Automatically load more, unlock search results, hide the global loading overlay, and display a small loading indicator in the bottom right corner. Add a button to clear all filters.  自动加载更多、解锁搜索结果、隐藏全局加载遮罩，并在右下角显示小加载指示， 添加一个清除所有过滤器按钮
 // @match        https://mods.paradoxplaza.com/games/*
 // @match        *://mods.paradoxinteractive.com/*
@@ -121,37 +121,65 @@
 
         const style = document.createElement('style');
         style.textContent = `
+      #pmh-filters-buttons-container {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+        padding: 8px 0;
+        box-sizing: border-box;
+      }
+
       #pmh-clear-filters-btn {
-        position: fixed;
-        left: 16px;
-        bottom: 16px;
-        z-index: 99998;
+        flex: 0 0 70%;
         padding: 10px 16px;
-        border-radius: 8px;
+        border-radius: 4px;
         background: rgba(100, 150, 255, 0.85);
         color: #fff;
         border: none;
         font-size: 14px;
         font-weight: 500;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        cursor: grab;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         transition: background 0.2s ease;
         user-select: none;
       }
 
       #pmh-clear-filters-btn:hover {
         background: rgba(80, 130, 255, 0.95);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
       }
 
       #pmh-clear-filters-btn:active {
-        cursor: grabbing;
+        transform: scale(0.98);
       }
 
-      #pmh-clear-filters-btn.dragging {
-        opacity: 0.9;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      #pmh-scroll-to-top-btn {
+        flex: 0 0 20%;
+        padding: 10px 16px;
+        border-radius: 4px;
+        background: rgba(100, 180, 100, 0.85);
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        font-weight: 500;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: background 0.2s ease;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #pmh-scroll-to-top-btn:hover {
+        background: rgba(80, 160, 80, 0.95);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      }
+
+      #pmh-scroll-to-top-btn:active {
+        transform: scale(0.98);
       }
     `;
         document.documentElement.appendChild(style);
@@ -164,76 +192,23 @@
 
         injectClearFiltersButtonStyle();
 
-        if (document.getElementById('pmh-clear-filters-btn')) return;
+        // 找到过滤器面板的内部滚动容器
+        const filtersPanel = document.querySelector('[class*="SearchPage-styles__filters--"]');
+        if (!filtersPanel) return;
 
-        const btn = document.createElement('button');
-        btn.id = 'pmh-clear-filters-btn';
-        btn.textContent = 'Clear Filters';
+        // 如果容器已经存在就不再添加
+        if (document.getElementById('pmh-filters-buttons-container')) return;
 
-        const savedPos = localStorage.getItem('pmh-button-pos');
-        if (savedPos) {
-            try {
-                const pos = JSON.parse(savedPos);
-                if (typeof pos.left === 'number') {
-                    btn.style.left = pos.left + 'px';
-                }
-                if (typeof pos.bottom === 'number') {
-                    btn.style.bottom = pos.bottom + 'px';
-                }
-            } catch (e) {
-                console.warn('PMH: failed to parse saved button position', e);
-            }
-        }
+        // 创建按钮容器
+        const container = document.createElement('div');
+        container.id = 'pmh-filters-buttons-container';
 
-        let isDragging = false;
-        let startX, startY, startLeft, startBottom;
+        // 创建清除过滤器按钮
+        const clearBtn = document.createElement('button');
+        clearBtn.id = 'pmh-clear-filters-btn';
+        clearBtn.textContent = 'Clear Filters';
 
-        btn.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            isDragging = true;
-            btn.classList.add('dragging');
-
-            startX = e.clientX;
-            startY = e.clientY;
-            startLeft = btn.offsetLeft;
-            startBottom = window.innerHeight - btn.offsetTop - btn.offsetHeight;
-
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-        });
-
-        function onMouseMove(e) {
-            if (!isDragging) return;
-
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-
-            const newLeft = Math.max(0, Math.min(startLeft + deltaX, window.innerWidth - btn.offsetWidth));
-            const newBottom = Math.max(0, Math.min(startBottom - deltaY, window.innerHeight - btn.offsetHeight));
-
-            btn.style.left = newLeft + 'px';
-            btn.style.bottom = newBottom + 'px';
-        }
-
-        function onMouseUp() {
-            if (!isDragging) return;
-            isDragging = false;
-            btn.classList.remove('dragging');
-
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-
-            const pos = {
-                left: btn.offsetLeft,
-                bottom: window.innerHeight - btn.offsetTop - btn.offsetHeight
-            };
-            localStorage.setItem('pmh-button-pos', JSON.stringify(pos));
-            console.log('PMH: Button position saved:', pos);
-        }
-
-        btn.addEventListener('click', () => {
-            if (isDragging) return;
-
+        clearBtn.addEventListener('click', () => {
             const inputs = document.querySelectorAll(
                 '.src-components-SearchPage-styles__filters--\\[fullhash\\] input'
             );
@@ -247,8 +222,26 @@
             console.log(`PMH: Clicked ${clickedCount} checked filter inputs.`);
         });
 
-        (document.body || document.documentElement).appendChild(btn);
-        console.log('PMH: Clear Filters button added.');
+        // 创建返回顶部按钮
+        const scrollTopBtn = document.createElement('button');
+        scrollTopBtn.id = 'pmh-scroll-to-top-btn';
+        scrollTopBtn.textContent = '🡹'; // 向上箭头图标
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            console.log('PMH: Scrolled to top.');
+        });
+
+        // 添加按钮到容器
+        container.appendChild(clearBtn);
+        container.appendChild(scrollTopBtn);
+
+        // 把容器插入到过滤器面板的最后
+        filtersPanel.appendChild(container);
+        console.log('PMH: Clear Filters and Scroll to Top buttons added to filters panel.');
     }
 
     /******************************************************************
@@ -333,6 +326,43 @@
         from { transform: rotate(0deg); }
         to   { transform: rotate(360deg); }
       }
+/* 1. 整个 Filter 面板浮在一边、垂直布局 */
+[class*="SearchPage-styles__filters--"] {
+  position: sticky;           /* 如果想真·脱离布局就改成 fixed，见下面 */
+  top: 80px;                  /* 根据顶部导航高度调，比如 64/72/80 */
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;     /* 避免跟着内容列一起被拉长 */
+  max-height: calc(100vh - 96px);  /* 整个面板不超过视口高度 */
+  box-sizing: border-box;
+  overflow: hidden;           /* 自己不滚，只让内部那块滚 */
+}
+
+/* 2. Filter 标题，只当作固定头部 */
+[class*="SearchPage-styles__filtersHeading--"] {
+  flex: 0 0 auto;
+}
+
+/* 3. 真正滚动的是这块超长内容 */
+[class*="SearchPage-Filter-styles__root--"] {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 4px;               /* 给滚动条留点空间 */
+  max-height: 100%;                 /* 高度由外层 max-height 限制 */
+  overscroll-behavior: contain;     /* 滚到底/顶时不要带着页面动 */
+}
+
+/* 4.（可选）滚动条美化一点 */
+[class*="SearchPage-Filter-styles__root--"]::-webkit-scrollbar {
+  width: 6px;
+}
+
+[class*="SearchPage-Filter-styles__root--"]::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+
     `;
         document.documentElement.appendChild(style);
         unlockStyleInjected = true;
@@ -400,6 +430,88 @@
         }
     }
 
+    function pinFiltersPanel() {
+    const outer = document.querySelector('[class*="SearchPage-styles__filters--"]');
+    if (!outer) return;
+
+    // 已经处理过就不要重复
+    if (outer.dataset.pmhPinned === '1') return;
+
+    const rect = outer.getBoundingClientRect();
+
+    // 1. 在原位置插入一个占位元素，防止布局塌陷
+    const placeholder = document.createElement('div');
+    placeholder.id = 'pmh-filters-placeholder';
+    placeholder.style.width = rect.width + 'px';
+    placeholder.style.height = rect.height + 'px';
+    outer.parentNode.insertBefore(placeholder, outer);
+
+    // 2. 把整个 filters 面板改成 fixed 悬浮
+    const TOP_OFFSET = 80; // 根据实际导航条高度调
+    // 获取相对于 viewport 的位置，加上当前滚动量得到绝对位置
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+    outer.style.position = 'fixed';
+    outer.style.top = TOP_OFFSET + 'px';
+    outer.style.left = (rect.left + scrollLeft) + 'px';
+    outer.style.width = rect.width + 'px';
+    outer.style.maxHeight = 'calc(100vh - ' + (TOP_OFFSET + 16) + 'px)';
+    outer.style.overflow = 'hidden';
+    outer.style.boxSizing = 'border-box';
+    outer.style.zIndex = '40';
+
+    outer.dataset.pmhPinned = '1';
+
+    // 3. 内部长列表自己滚
+    const inner = outer.querySelector('[class*="SearchPage-Filter-styles__root--"]');
+    if (inner) {
+        inner.style.maxHeight = '100%';
+        inner.style.overflowY = 'auto';
+        inner.style.overscrollBehavior = 'contain';
+    }
+
+    // 4. 添加一次性的窗口事件监听
+    let resizeTimeout;
+    const handleResize = () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const newRect = placeholder.getBoundingClientRect();
+            const newScrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            outer.style.left = (newRect.left + newScrollLeft) + 'px';
+            outer.style.width = newRect.width + 'px';
+        }, 150);
+    };
+
+    const handleScroll = () => {
+        const newScrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const newRect = placeholder.getBoundingClientRect();
+        outer.style.left = (newRect.left + newScrollLeft) + 'px';
+    };
+
+    // 只添加一次监听器
+    if (!outer.dataset.pmhListenersAdded) {
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('scroll', handleScroll);
+        outer.dataset.pmhListenersAdded = '1';
+    }
+
+    console.log('Paradox Mods: filters panel pinned & scrollable.');
+}
+
+// 初始化：DOM 就绪后跑一次，然后再定时检查（应对 SPA 内跳转）
+function initPinnedFilters() {
+    pinFiltersPanel();
+    // 简单粗暴点，每秒检查一次有没有新的 filters 出现
+    setInterval(pinFiltersPanel, 1000);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPinnedFilters);
+} else {
+    initPinnedFilters();
+}
+
+
     /******************************************************************
      * URL 变化监听：SPA + 前进后退 + bfcache
      ******************************************************************/
@@ -407,6 +519,7 @@
         if (isGamesModsListPage()) {
             ensureAutoLoadSetup();
             ensureClearFiltersButton();
+            pinFiltersPanel();
         }
 
         initMiniSpinner();
