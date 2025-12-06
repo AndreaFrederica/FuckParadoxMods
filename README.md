@@ -42,7 +42,7 @@ First, install a userscript manager in your browser:
 
 Click the link below, and Tampermonkey will automatically recognize and prompt you to install:
 
-**[Click to Install Script]([https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.user.js](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).min.user.js))**
+**[Click to Install Script](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).min.user.js)**
 
 #### Method 2: Manual Installation
 
