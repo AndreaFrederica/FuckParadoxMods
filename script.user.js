@@ -2,7 +2,7 @@
 // @name         Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
 // @namespace    http://tampermonkey.net/
 // @version      1.5
-// @description  自动加载更多、解锁搜索结果、隐藏全局加载遮罩，并在右下角显示小加载指示
+// @description  Automatically load more, unlock search results, hide the global loading overlay, and display a small loading indicator in the bottom right corner. Add a button to clear all filters.  自动加载更多、解锁搜索结果、隐藏全局加载遮罩，并在右下角显示小加载指示， 添加一个清除所有过滤器按钮
 // @match        https://mods.paradoxplaza.com/games/*
 // @match        *://mods.paradoxinteractive.com/*
 // @match        *://mods.paradoxplaza.com/*
