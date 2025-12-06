@@ -6,6 +6,7 @@
 // @match        https://mods.paradoxplaza.com/games/*
 // @match        *://mods.paradoxinteractive.com/*
 // @match        *://mods.paradoxplaza.com/*
+// @license      MPL-2.0
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
@@ -107,6 +108,146 @@
 
             console.log('Paradox Mods Auto Load More (top∞ ~ bottom threshold, with polling) enabled.');
         }
+    }
+
+    /******************************************************************
+     * 功能二：浮动按钮 - 清除所有搜索过滤器勾选（支持拖动和位置记忆）
+     ******************************************************************/
+    if (ENABLE_AUTO_LOAD_MORE) {
+        const style = document.createElement('style');
+        style.textContent = `
+      /* 清空过滤器按钮样式 */
+      #pmh-clear-filters-btn {
+        position: fixed;
+        left: 16px;
+        bottom: 16px;
+        z-index: 99998;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: rgba(100, 150, 255, 0.85);
+        color: #fff;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        cursor: grab;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: background 0.2s ease;
+        user-select: none;
+      }
+
+      #pmh-clear-filters-btn:hover {
+        background: rgba(80, 130, 255, 0.95);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      #pmh-clear-filters-btn:active {
+        cursor: grabbing;
+      }
+
+      #pmh-clear-filters-btn.dragging {
+        opacity: 0.9;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      }
+    `;
+        document.documentElement.appendChild(style);
+
+        function ensureClearFiltersButton() {
+            if (document.getElementById('pmh-clear-filters-btn')) return;
+
+            const btn = document.createElement('button');
+            btn.id = 'pmh-clear-filters-btn';
+            btn.textContent = 'Clear Filters';
+
+            // 从 localStorage 恢复按钮位置
+            const savedPos = localStorage.getItem('pmh-button-pos');
+            if (savedPos) {
+                const pos = JSON.parse(savedPos);
+                btn.style.left = pos.left + 'px';
+                btn.style.bottom = pos.bottom + 'px';
+            }
+
+            // 点击事件
+            let isDragging = false;
+            let startX, startY, startLeft, startBottom;
+
+            btn.addEventListener('mousedown', (e) => {
+                // 阻止文本选中
+                e.preventDefault();
+                isDragging = true;
+                btn.classList.add('dragging');
+
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = btn.offsetLeft;
+                startBottom = window.innerHeight - btn.offsetTop - btn.offsetHeight;
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
+            function onMouseMove(e) {
+                if (!isDragging) return;
+
+                const deltaX = e.clientX - startX;
+                const deltaY = e.clientY - startY;
+
+                const newLeft = Math.max(0, Math.min(startLeft + deltaX, window.innerWidth - btn.offsetWidth));
+                const newBottom = Math.max(0, Math.min(startBottom - deltaY, window.innerHeight - btn.offsetHeight));
+
+                btn.style.left = newLeft + 'px';
+                btn.style.bottom = newBottom + 'px';
+            }
+
+            function onMouseUp() {
+                if (!isDragging) return;
+                isDragging = false;
+                btn.classList.remove('dragging');
+
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+
+                // 保存位置到 localStorage
+                const pos = {
+                    left: btn.offsetLeft,
+                    bottom: window.innerHeight - btn.offsetTop - btn.offsetHeight
+                };
+                localStorage.setItem('pmh-button-pos', JSON.stringify(pos));
+                console.log('Button position saved:', pos);
+            }
+
+            // 点击清空过滤器（检测是否发生了拖动）
+            btn.addEventListener('click', (e) => {
+                if (isDragging) return; // 如果正在拖动，不触发点击事件
+
+                const inputs = document.querySelectorAll(
+                    '.src-components-SearchPage-styles__filters--\\[fullhash\\] input'
+                );
+                let clickedCount = 0;
+                inputs.forEach(input => {
+                    if ((input.type === 'checkbox' || input.type === 'radio') && input.checked === true) {
+                        // 发送 click 事件而不是直接改值
+                        input.click();
+                        clickedCount++;
+                    }
+                });
+                console.log(`Clicked ${clickedCount} checked filter inputs.`);
+            });
+
+            (document.body || document.documentElement).appendChild(btn);
+        }
+
+        function initClearFiltersButton() {
+            ensureClearFiltersButton();
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initClearFiltersButton);
+        } else {
+            initClearFiltersButton();
+        }
+
+        console.log('Paradox Mods Clear Filters button enabled (draggable with position memory).');
     }
 
     /******************************************************************
