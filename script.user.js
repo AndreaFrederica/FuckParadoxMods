@@ -7,6 +7,9 @@
 // @match        *://mods.paradoxinteractive.com/*
 // @match        *://mods.paradoxplaza.com/*
 // @license      MPL-2.0
+// @copyright 2025, AndreaFrederica (https://openuserjs.org/users/AndreaFrederica)
+// @updateURL https://openuserjs.org/meta/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).meta.js
+// @downloadURL https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
