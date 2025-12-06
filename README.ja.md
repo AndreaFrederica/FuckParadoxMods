@@ -42,7 +42,7 @@ Paradox Modsは、Paradox Interactiveのゲーム（Hearts of Iron IV、Europa U
 
 以下のリンクをクリックすると、Tampermonkeyが自動的に認識してインストールを促します：
 
-**[スクリプトをインストール](https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.user.js)**
+**[スクリプトをインストール](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js)**
 
 #### 方法2: 手動インストール
 
