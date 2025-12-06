@@ -5,7 +5,7 @@
 
 # Paradox Mods Helper
 
-A browser userscript that modernizes the Paradox Mods website experience.
+A browser userscript that modernizes the Paradox Mods website experience.  
 **[OpenJS](https://openuserjs.org/scripts/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_%2B_Search_Fix_%2B_Hide_Loader_%2B_Mini_Spinner))**
 
 **Current Version:** 1.2
@@ -43,7 +43,7 @@ First, install a userscript manager in your browser:
 
 Click the link below, and Tampermonkey will automatically recognize and prompt you to install:
 
-[**[Click to Install Script](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js)**]
+[**[Click to Install Script](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js)**]  
 **[OpenJS](https://openuserjs.org/scripts/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_%2B_Search_Fix_%2B_Hide_Loader_%2B_Mini_Spinner))**
 
 #### Method 2: Manual Installation
