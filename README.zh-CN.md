@@ -42,7 +42,7 @@ Paradox Mods 是 Paradox Interactive 旗下游戏（如《钢铁雄心4》、《
 
 点击下面的链接，Tampermonkey 会自动识别并提示安装：
 
-(https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js)
+**[点击安装脚本](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js)**
 
 #### 方法二：手动安装
 
