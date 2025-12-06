@@ -42,7 +42,7 @@ Paradox Mods 是 Paradox Interactive 旗下遊戲（如《鋼鐵雄心4》、《
 
 點選下面的連結，Tampermonkey 會自動識別並提示安裝：
 
-**[點選安裝腳本](https://raw.githubusercontent.com/AndreaFrederica/FuckParadoxMods/main/script.user.js)**
+**[點選安裝腳本](https://openuserjs.org/install/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_+_Search_Fix_+_Hide_Loader_+_Mini_Spinner).user.js)**
 
 #### 方法二：手動安裝
 
