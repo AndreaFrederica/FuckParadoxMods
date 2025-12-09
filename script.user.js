@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Paradox Mods Helper (Auto Load + Search Fix + Hide Loader + Mini Spinner)
 // @namespace    http://tampermonkey.net/
-// @version      1.9
+// @version      1.10
 // @description  Automatically load more, unlock search results, hide the global loading overlay, and display a small loading indicator in the bottom right corner. Add a button to clear all filters.  自动加载更多、解锁搜索结果、隐藏全局加载遮罩，并在右下角显示小加载指示， 添加一个清除所有过滤器按钮
 // @match        https://mods.paradoxplaza.com/games/*
 // @match        *://mods.paradoxinteractive.com/*
@@ -47,17 +47,61 @@
 
     /******************************************************************
      * 功能一：LOAD MORE 自动点击（仅 /games/*）
+     * 选择器策略：优先结构特征，不依赖文字
      ******************************************************************/
     let autoLoadTimerId = null;
     let autoLoadScrollBound = false;
 
     function getLoadMoreButton() {
-        const buttons = document.querySelectorAll('button');
-        for (const btn of buttons) {
-            if (btn.innerText.trim() === 'LOAD MORE') {
+        // 策略 1：通过 Pagination 容器和 Button class 的组合（最稳定）
+        let btn = document.querySelector(
+            '[class*="Pagination-styles__pagination"] button[class*="Button-styles__root"]'
+        );
+        if (btn) {
+            console.log('PMH: Found button via Pagination + Button class selector');
+            return btn;
+        }
+
+        // 策略 2：通过 Pagination 容器内的按钮（仅限第一个）
+        const paginationDiv = document.querySelector('[class*="Pagination-styles__pagination"]');
+        if (paginationDiv) {
+            btn = paginationDiv.querySelector('button');
+            if (btn) {
+                console.log('PMH: Found button via Pagination container');
                 return btn;
             }
         }
+
+        // 策略 3：按钮带有特定的 class 组合（green + outline 或类似）
+        btn = document.querySelector(
+            'button[class*="Button-styles__root"][class*="Button-styles__green"]'
+        );
+        if (btn) {
+            console.log('PMH: Found button via Button class combination');
+            return btn;
+        }
+
+        // 策略 4：通过宽泛的 Pagination 特征搜索
+        const allButtons = document.querySelectorAll('button');
+        for (const button of allButtons) {
+            const parent = button.closest('[class*="Pagination"]');
+            if (parent) {
+                console.log('PMH: Found button via parent Pagination element');
+                return button;
+            }
+        }
+
+        // 策略 5（备选）：如果上述都找不到，才使用文字匹配
+        const buttons = document.querySelectorAll('button');
+        for (const btn of buttons) {
+            const text = btn.innerText.trim();
+            if (text === 'LOAD MORE' || text === '加载更多' || text === 'もっと読み込む' || text === 'CHARGER PLUS') {
+                console.log('PMH: Found button via text fallback:', text);
+                return btn;
+            }
+        }
+
+        console.log('PMH: Load More button not found');
         return null;
     }
 
