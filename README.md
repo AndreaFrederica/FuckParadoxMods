@@ -7,7 +7,7 @@
 
 A browser userscript that modernizes the Paradox Mods website experience.  
 **[OpenJS](https://openuserjs.org/scripts/AndreaFrederica/Paradox_Mods_Helper_(Auto_Load_%2B_Search_Fix_%2B_Hide_Loader_%2B_Mini_Spinner))**
-
+**[GreasyFork](https://greasyfork.org/zh-CN/scripts/558905-paradox-mods-helper-auto-load-search-fix-hide-loader-mini-spinner)**
 **Current Version:** 1.2
 
 ## 📝 About
